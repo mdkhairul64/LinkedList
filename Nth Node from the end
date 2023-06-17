@@ -31,3 +31,36 @@
         return head->data;
         
     }
+
+***this is a optimized code but here i can't understand a point that if (currNode==NULL return -1 )why i written this
+** when i did not write this part then i got a segmentation fault
+
+int getNthFromLast(Node *head, int n)
+{
+
+Node* currNode=head,*nthNode=head; //this is  a two pointer approach
+    
+    while(n!=0)
+    {
+        // if(currNode==NULL)
+        // {
+        //     return -1;
+        // }
+        currNode=currNode->next;
+        n--;
+    }
+    
+    while(currNode!=NULL)
+    {
+        currNode=currNode->next;
+        nthNode=nthNode->next;
+    }
+    if(nthNode!=NULL)
+    {
+        return nthNode->data;
+    }
+    else{
+        return -1;
+    }
+}
+
