@@ -1,4 +1,6 @@
- ***here is my simple brute force
+*****the source of the code is from geeksforgeeks
+
+***here is my simple brute force
  
  int getNthFromLast(Node *head, int n)
     {
