@@ -1,0 +1,133 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+///in this type of list i need not create two types
+////head and tail
+///i only made tail 
+//through i can access tail also
+
+
+class Node{
+    public:
+    int data;
+    Node* next;
+
+    ///this is constructor
+    /// 
+    Node(int data)
+    {
+        this->data=data;
+        this->next=NULL;   
+    }
+    /// destructor
+    ~Node()
+    {
+        int value=this->data;
+        if(this->next!=NULL)
+        {
+            delete next;
+            this->next=NULL;
+        }
+    }
+};
+
+void insert_node(Node* &tail,int element,int d)
+{
+    ///asssuming the element is preent in the list
+
+
+    ///in case of empty list
+
+    if(tail==NULL)
+    {
+        Node* new_node=new Node(d);
+        tail=new_node;
+        new_node->next=new_node;
+    }
+    else{
+        // non-empty list
+        /// assuming that the element is present in the list
+        Node* curr=tail;
+        while(curr->data!=element)
+        {
+            curr=curr->next;
+        }
+        Node* temp=new Node(d);
+        temp->next=curr->next;
+        curr->next=temp;
+    }
+}
+
+void delete_node(Node* &tail,int value)
+{
+    if(tail==NULL)
+    {
+        cout<<"list is empty"<<endl;
+        return ;
+    }
+    else{
+        Node* prev=tail;
+        Node* curr=prev->next;
+
+        while(curr->data!=value)
+        {
+            prev=curr;
+            curr=curr->next;
+        }
+        prev->next=curr->next;
+
+        if(curr==prev)
+        {
+            tail=NULL;
+        }
+
+        else if(tail==curr)
+        {
+            tail=prev;
+        }
+        curr->next=NULL;
+        delete curr;
+    }
+}
+
+
+void print_list(Node* &tail)
+{
+    Node * temp=tail;
+
+    if(tail==NULL)
+    {
+        cout<<"list is empty"<<endl;
+    }
+
+    do{
+        cout<<tail->data<<" ";
+        tail=tail->next;
+    }while(tail!=temp);
+    cout<<endl;
+}
+
+int main()
+{
+    Node* tail=NULL;
+
+    ///emtpy list me insert krre hai
+    insert_node(tail,54,3);
+    print_list(tail);
+
+    insert_node(tail,3,4);
+    print_list(tail);
+
+
+    insert_node(tail,4,5);
+    print_list(tail);
+
+    insert_node(tail,5,6);
+    print_list(tail);
+
+
+    delete_node(tail,3);
+    print_list(tail);
+
+    return 0;
+}
