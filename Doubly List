@@ -7,12 +7,12 @@ class Node{
     Node* prev;
     Node* next;
 
-    Node(int d)
-    {
-        this->data=d;
-        this->prev=NULL;
-        this->next=NULL;
-    }
+    // Node(int d)
+    // {
+    //     this->data=d;
+    //     this->prev=NULL;
+    //     this->next=NULL;
+    // }
 
     ~Node()
     {
@@ -29,32 +29,46 @@ void insert_at_head(Node* &head,int d)
 {
     if(head==NULL)
     {
-        Node* temp=new Node(d);
+        Node* temp=new Node();
+        temp->data=d;
         head=temp;
     }
     else {
-        Node * temp=new Node(d);
+        Node * temp=new Node();
+        temp->data=d;
         temp->next=head;
         head->prev=temp;
         head=temp;
     }
 }
 
+// 
+
 void insert_at_tail(Node* &tail,int d)
 {
+    Node* new_node=new Node();
+    Node* last=tail;
+
+    new_node->data=d;
+    new_node->next=NULL;
+
     if(tail==NULL)
     {
-        Node* temp=new Node(d);
-        tail=temp;
+        new_node->prev=NULL;
+        tail=new_node;
+        return ;
     }
-    else{
-        Node* temp=new Node(d);
-        tail->next=temp;
-        temp->prev=tail;
-        tail=temp;
+
+    while(last->next != NULL)
+    {
+        last = last ->next;
     }
+    last->next=new_node;
+    new_node->prev=last;
+
+    return ;
 }
-void insert_at_position(Node* &head,Node* & tail,int position,int d)
+void insert_at_position(Node* &head,int position,int d)
 {
     ///insert at first position
     if(position==1)
@@ -73,18 +87,19 @@ void insert_at_position(Node* &head,Node* & tail,int position,int d)
     //inserting at last position
     if(temp->next==NULL)
     {
-        insert_at_tail(tail,d);
+        insert_at_tail(head,d);
         return ;
     }
 
-    Node* node_to_insert=new Node(d);
-    node_to_insert->next=temp->next;
-    temp->next->prev=node_to_insert;
-    temp->next=node_to_insert;
-    node_to_insert->prev=temp;
+        Node* node_to_insert=new Node();
+        node_to_insert->data=d;
+        node_to_insert->next=temp->next;
+        temp->next->prev=node_to_insert;
+        temp->next=node_to_insert;
+        node_to_insert->prev=temp;
 }
 
-void delete_node(int position,Node* &head)
+void delete_node(Node* &head,int position)
 {
     if(position==1)
     {
@@ -139,32 +154,31 @@ int get_lenght(Node* &head)
 
 int main()
 {
-    Node* node1=new Node(10);
-    Node* head=node1;
-    Node* tail=node1;
+    Node* head=NULL;
+
+    int n;
+    cin>>n;
+
+
+    while(n--)
+    {
+        int data;
+        cin>>data;
+
+        insert_at_tail(head,data);
+    }
+
+   // print_list(head);
+
+   // insert_at_position(head,5,4);
 
     print_list(head);
+    
 
-    insert_at_head(head,11);
+
+    delete_node(head,3);
+
     print_list(head);
-
-    insert_at_tail(tail,20);
-    print_list(head);
-
-
-    insert_at_position(head,tail,2,1000);
-    print_list(head);
-
-
-    insert_at_head(head,99);
-    print_list(head);
-
-     insert_at_position(head,tail,6,1111);
-    print_list(head);
-
-    delete_node(4,head);
-    print_list(head);
-
 
     return 0;
 
