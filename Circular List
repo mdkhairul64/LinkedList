@@ -4,7 +4,8 @@ using namespace std;
 ///in this type of list i need not create two types
 ////head and tail
 ///i only made tail 
-//through i can access tail also
+//through i can access tail also because this is a circular list the last and first index
+// are connected
 
 
 class Node{
@@ -14,11 +15,11 @@ class Node{
 
     ///this is constructor
     /// 
-    Node(int data)
-    {
-        this->data=data;
-        this->next=NULL;   
-    }
+    // Node(int data)
+    // {
+    //     this->data=data;
+    //     this->next=NULL;   
+    // }
     /// destructor
     ~Node()
     {
@@ -31,6 +32,64 @@ class Node{
     }
 };
 
+
+
+void insert_at_head(Node** head_ref, int data) 
+{ 
+  
+    // Create a new node and make head 
+    // as next of it. 
+
+    Node* ptr1 = new Node(); 
+    ptr1->data = data; 
+    ptr1->next = *head_ref; 
+  
+    // If linked list is not NULL then 
+    // set the next of last node 
+    if (*head_ref != NULL) { 
+  
+        // Find the node before head and 
+        // update next of it. 
+        Node* temp = *head_ref; 
+        while (temp->next != *head_ref) 
+            temp = temp->next; 
+        temp->next = ptr1; 
+    } 
+    else
+  
+        // For the first node 
+        ptr1->next = ptr1; 
+  
+    *head_ref = ptr1; 
+} 
+
+
+void insert_at_tail(Node* &head, int d)
+{
+    if (head == NULL)
+    {
+        // Node* newNode = new Node();
+        Node* newNode = new Node();
+        newNode->data = d;
+        head = newNode;
+        newNode->next = head;
+    }
+    else
+    {
+        Node* curr = head;
+        while (curr->next != head)
+        {
+            curr = curr->next;
+        }
+
+        Node* temp = new Node();
+        temp->data = d;
+        temp->next = head;
+        curr->next = temp;
+    }
+}
+
+
 void insert_node(Node* &tail,int element,int d)
 {
     ///asssuming the element is preent in the list
@@ -40,7 +99,8 @@ void insert_node(Node* &tail,int element,int d)
 
     if(tail==NULL)
     {
-        Node* new_node=new Node(d);
+        Node* new_node=new Node();
+        new_node->data=d;
         tail=new_node;
         new_node->next=new_node;
     }
@@ -52,7 +112,8 @@ void insert_node(Node* &tail,int element,int d)
         {
             curr=curr->next;
         }
-        Node* temp=new Node(d);
+        Node* temp=new Node();
+        temp->data=d;
         temp->next=curr->next;
         curr->next=temp;
     }
@@ -109,25 +170,28 @@ void print_list(Node* &tail)
 
 int main()
 {
-    Node* tail=NULL;
+    Node* head=NULL;
 
-    ///emtpy list me insert krre hai
-    insert_node(tail,54,3);
-    print_list(tail);
+   int n;
+   cin>>n;
 
-    insert_node(tail,3,4);
-    print_list(tail);
+   while(n--)
+   {
+        int data;
+        cin>>data;
 
+        insert_at_tail(head,data);
+   }
+    print_list(head);
 
-    insert_node(tail,4,5);
-    print_list(tail);
+    // insert_node(head,3,10);
 
-    insert_node(tail,5,6);
-    print_list(tail);
+    // print_list(head);
 
+    delete_node(head,3);
 
-    delete_node(tail,3);
-    print_list(tail);
+    print_list(head);
+
 
     return 0;
 }
