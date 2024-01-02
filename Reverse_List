@@ -1,0 +1,205 @@
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node* next;
+
+    ///this is constructor
+    /// 
+    // Node(int data)
+    // {
+    //     this->data=data;
+    //     this->next=NULL;   
+    // }
+    ~Node()
+    {
+        int value=this->data;
+        if(this->next!=NULL)
+        {
+            delete next;
+            this->next=NULL;
+        }
+    }
+};
+
+void insert_at_head(Node* & head,int d)
+{
+        Node* new_node=new Node();
+
+        new_node->data=d;
+
+        new_node->next=head;
+
+        head=new_node;
+}
+
+void insert_at_tail(Node* &tail,int d)
+{
+     Node* newNode=new Node();
+    newNode->data = d;
+    newNode->next     = NULL;
+
+    //if head is NULL, it is an empty list
+    if(tail == NULL)
+         tail = newNode;
+    //Otherwise, find the last node and add the newNode
+    else
+    {
+       // struct node *lastNode = *head
+        Node* lastNode=tail;
+
+        //last node's next address will be NULL.
+        while(lastNode->next != NULL)
+        {
+            lastNode = lastNode->next;
+        }
+
+        //add the newNode at the end of the linked list
+        lastNode->next = newNode;
+    }
+}
+
+///in this function i use head and tail for maintaing the update of head and tail
+
+void insert_at_position(Node* &head,int position,int d)
+{
+    ///inserting at first position
+    if(position==1)
+    {
+        insert_at_head(head,d);
+        return ;
+    }
+    Node* temp= head;
+
+    int cnt=1;
+    while(cnt<position-1)
+    {
+        temp=temp->next;
+        cnt++;
+    }
+
+    ///inserting at last position
+    
+    if(temp->next==NULL)
+    {
+        insert_at_tail(head,d);
+        return ;
+    }
+    Node* nodetoinsert=new Node();
+    nodetoinsert->data=d;
+    nodetoinsert->next=temp->next;
+    temp->next=nodetoinsert; 
+}
+
+
+void delete_node(Node* &head,int position)
+{
+    if(position==1)
+    {
+        Node* temp=head;
+        head=head->next;
+        
+        temp->next=NULL;
+        delete temp;
+        
+    }
+    else{
+        Node* curr=head;
+        Node* prev=NULL;
+
+        int cnt=1;
+        while(cnt<position)
+        {
+            prev=curr;
+            curr=curr->next;
+            cnt++;
+        }
+
+        prev->next=curr->next;
+        
+        curr->next=NULL;  ///to make free the memory i should null the value
+        delete curr;
+    }
+}
+
+void print_list(Node * &head)
+{
+    Node* temp=head;
+    while(temp!=NULL)
+    {
+        cout<<temp->data<<" ";
+        temp=temp->next;
+    }cout<<endl;
+}
+
+Node* reverse_list(Node* &head)
+{
+    Node* temp=head;
+    Node* prev=NULL;
+
+    Node* front;
+
+    while(temp!=NULL)
+    {
+        front=temp->next;
+
+        temp->next=prev;
+        prev=temp;
+
+        temp=front;
+    }
+
+    return prev;
+}
+
+Node* reverse_list_recursive(Node* &head)
+{
+    Node* temp=head;
+
+
+    if(head==NULL || head->next==NULL)
+    {
+        return head;
+    }
+    Node* newHead=reverse_list_recursive(temp->next);
+
+    Node* front=head->next;
+
+    front->next=temp;
+
+    temp->next=NULL;
+
+    return newHead;
+}
+
+int main()
+{
+
+   Node *head = NULL;
+
+   int n;
+   cin>>n;
+
+
+     while(n--)
+     {
+        int data;
+        cin>>data;
+
+        insert_at_tail(head,data);
+
+     }
+     //Node* res=reverse_list(head);
+     
+     print_list(head);
+
+     Node* res1=reverse_list_recursive(head);
+
+     print_list(res1);
+
+    
+    return 0;
+}
