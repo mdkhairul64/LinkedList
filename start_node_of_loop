@@ -1,0 +1,259 @@
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node* next;
+
+    ///this is constructor
+    /// 
+    // Node(int data)
+    // {
+    //     this->data=data;
+    //     this->next=NULL;   
+    // }
+    ~Node()
+    {
+        int value=this->data;
+        if(this->next!=NULL)
+        {
+            delete next;
+            this->next=NULL;
+        }
+    }
+};
+
+void insert_at_head(Node* & head,int d)
+{
+        Node* new_node=new Node();
+
+        new_node->data=d;
+
+        new_node->next=head;
+
+        head=new_node;
+}
+
+void insert_at_tail(Node* &tail,int d)
+{
+     Node* newNode=new Node();
+    newNode->data = d;
+    newNode->next     = NULL;
+
+    //if head is NULL, it is an empty list
+    if(tail == NULL)
+         tail = newNode;
+    //Otherwise, find the last node and add the newNode
+    else
+    {
+       // struct node *lastNode = *head
+        Node* lastNode=tail;
+
+        //last node's next address will be NULL.
+        while(lastNode->next != NULL)
+        {
+            lastNode = lastNode->next;
+        }
+
+        //add the newNode at the end of the linked list
+        lastNode->next = newNode;
+    }
+}
+
+///in this function i use head and tail for maintaing the update of head and tail
+
+void insert_at_position(Node* &head,int position,int d)
+{
+    ///inserting at first position
+    if(position==1)
+    {
+        insert_at_head(head,d);
+        return ;
+    }
+    Node* temp= head;
+
+    int cnt=1;
+    while(cnt<position-1)
+    {
+        temp=temp->next;
+        cnt++;
+    }
+
+    ///inserting at last position
+    
+    if(temp->next==NULL)
+    {
+        insert_at_tail(head,d);
+        return ;
+    }
+    Node* nodetoinsert=new Node();
+    nodetoinsert->data=d;
+    nodetoinsert->next=temp->next;
+    temp->next=nodetoinsert; 
+}
+
+
+void delete_node(Node* &head,int position)
+{
+    if(position==1)
+    {
+        Node* temp=head;
+        head=head->next;
+        
+        temp->next=NULL;
+        delete temp;
+        
+    }
+    else{
+        Node* curr=head;
+        Node* prev=NULL;
+
+        int cnt=1;
+        while(cnt<position)
+        {
+            prev=curr;
+            curr=curr->next;
+            cnt++;
+        }
+
+        prev->next=curr->next;
+        
+        curr->next=NULL;  ///to make free the memory i should null the value
+        delete curr;
+    }
+}
+
+void print_list(Node * &head)
+{
+    Node* temp=head;
+    while(temp!=NULL)
+    {
+        cout<<temp->data<<" ";
+        temp=temp->next;
+    }cout<<endl;
+}
+
+Node* ses(Node* &head)
+{
+    Node*temp=head;
+
+    while(temp->next!=NULL)
+    {
+        temp=temp->next;
+    }
+    return temp;
+}
+Node*  is_circular(Node* &head)
+{
+    if (head == NULL)
+    {
+        return NULL;  // Changed to false since an empty list is not circular
+    }
+
+    Node* slow = head;
+    Node* fast = head;
+
+    while (fast != NULL && fast->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if (slow == fast)
+        {
+            return slow;  // Detected a cycle
+        }
+    }
+
+    return NULL;  // No cycle found
+}
+
+Node* start_node(Node* &head)
+{
+    if(head == NULL)
+    {
+        return NULL;
+    }
+    Node* intersection=is_circular(head);
+    Node* slow=head;
+
+    while(slow!=intersection)
+    {
+        slow=slow->next;
+        intersection=intersection->next;
+    }
+    return slow;
+}
+
+void removeLoop(Node* &head)
+{
+    if(head==NULL)
+    {
+        return;
+    }
+    Node* startOfLoop=start_node(head);
+    Node* temp=startOfLoop;
+
+    while(temp->next != startOfLoop)
+    {
+        temp=temp->next;
+    }
+    temp->next=NULL;
+}
+int main()
+{
+
+   Node *head = NULL;
+
+    int n;
+    cin>>n;
+
+
+     while(n--)
+     {
+        int data;
+        cin>>data;
+
+        insert_at_tail(head,data);
+     }
+     
+     print_list(head);
+     Node* res=ses(head);
+
+     res->next=head->next;
+
+
+     
+
+     cout<<res->data<<endl;
+
+     cout<<res->next->data<<endl;
+
+     if(is_circular(head))
+     {
+        cout<<"yes"<<endl;
+     }
+     else{
+        cout<<"NO"<<endl;
+     }
+
+     Node* suru=start_node(head);
+     cout<<suru->data<<endl;
+
+     removeLoop(head);
+
+     if(is_circular(head))
+     {
+        cout<<"yes"<<endl;
+     }
+     else{
+        cout<<"NO"<<endl;
+     }
+
+
+
+
+
+    return 0;
+}
