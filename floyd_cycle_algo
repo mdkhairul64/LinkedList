@@ -1,0 +1,269 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+///in this type of list i need not create two types
+////head and tail
+///i only made tail 
+//through i can access tail also because this is a circular list the last and first index
+// are connected
+
+
+class Node{
+    public:
+    int data;
+    Node* next;
+    ///this is an operation of the meant i think of to the by the leading of the to call the leading 
+    ///i think 
+    ///this is constructor
+    /// 
+    // Node(int data)
+    // {
+    //     this->data=data;
+    //     this->next=NULL;   
+    // }
+    /// destructor
+    ~Node()
+    {
+        int value=this->data;
+        if(this->next!=NULL)
+        {
+            delete next;
+            this->next=NULL;
+        }
+    }
+};
+
+
+
+void insert_at_head(Node** head_ref, int data) 
+{ 
+  
+    // Create a new node and make head 
+    // as next of it. 
+
+
+    Node* ptr1 = new Node(); 
+    ptr1->data = data; 
+    ptr1->next = *head_ref; 
+    
+    // If linked list is not NULL then 
+    // set the next of last node 
+    if (*head_ref != NULL) { 
+  
+        // Find the node before head and 
+        // update next of it. 
+        Node* temp = *head_ref; 
+        while (temp->next != *head_ref) 
+            temp = temp->next; 
+        temp->next = ptr1; 
+    } 
+    else
+  
+        // For the first node 
+        ptr1->next = ptr1; 
+  
+    *head_ref = ptr1; 
+} 
+
+
+void insert_at_tail(Node* &head, int d)
+{
+    if (head == NULL)
+    {
+        // Node* newNode = new Node();
+        Node* newNode = new Node();
+        newNode->data = d;
+        head = newNode;
+        newNode->next = head;
+    }
+    else
+    {
+        Node* curr = head;
+        while (curr->next != head)
+        {
+            curr = curr->next;
+        }
+
+        Node* temp = new Node();
+        temp->data = d;
+        temp->next = head;
+        curr->next = temp;
+    }
+}
+
+
+void insert_node(Node* &tail,int element,int d)
+{
+    ///asssuming the element is preent in the list
+
+
+    ///in case of empty list
+
+    if(tail==NULL)
+    {
+        Node* new_node=new Node();
+        new_node->data=d;
+        tail=new_node;
+        new_node->next=new_node;
+    }
+    else{
+        // non-empty list
+        /// assuming that the element is present in the list
+        Node* curr=tail;
+        while(curr->data!=element)
+        {
+            curr=curr->next;
+        }
+        Node* temp=new Node();
+        temp->data=d;
+        temp->next=curr->next;
+        curr->next=temp;
+    }
+}
+
+void delete_node(Node* &tail,int value)
+{
+    if(tail==NULL)
+    {
+        cout<<"list is empty"<<endl;
+        return ;
+    }
+    else{
+        Node* prev=tail;
+        Node* curr=prev->next;
+
+        while(curr->data!=value)
+        {
+            prev=curr;
+            curr=curr->next;
+        }
+        prev->next=curr->next;
+
+        if(curr==prev)
+        {
+            tail=NULL;
+        }
+
+        else if(tail==curr)
+        {
+            tail=prev;
+        }
+        curr->next=NULL;
+        delete curr;
+    }
+}
+
+
+void print_list(Node* &tail)
+{
+    Node * temp=tail;
+
+    if(tail==NULL)
+    {
+        cout<<"list is empty"<<endl;
+    }
+
+    do{
+        cout<<tail->data<<" ";
+        tail=tail->next;
+    }while(tail!=temp);
+    cout<<endl;
+}
+// this is hare and tortoise algorithm or floyd cycle detect algorithm
+
+bool is_circular(Node* &head)
+{
+    if (head == NULL)
+    {
+        return false;  // Changed to false since an empty list is not circular
+    }
+
+    Node* slow = head;
+    Node* fast = head;
+
+    while (fast != NULL && fast->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if (slow == fast)
+        {
+            return true;  // Detected a cycle
+        }
+    }
+
+    return false;  // No cycle found
+}
+// this is by hash map
+bool detectLoop(Node* &head)
+{
+    if(head == NULL)
+    {
+        return false;
+    }
+
+    map<Node*,bool> visited;
+
+    Node* temp=head;
+
+    while(temp!=NULL)
+    {
+        if(visited[temp]==true)
+        {
+            return 1;
+        }
+        visited[temp]=true;
+        temp=temp->next;
+    }
+    return false; 
+}
+
+int main()
+{
+    Node* head=NULL;
+
+   int n;
+   cin>>n;
+
+   while(n--)
+   {
+        int data;
+        cin>>data;
+
+        insert_at_tail(head,data);
+   }
+    print_list(head);
+
+    
+    //res->next=head->next->next;
+
+    
+
+    // insert_node(head,3,10);
+
+    // print_list(head);
+
+    //delete_node(head,3);
+
+    //print_list(head);
+
+    // if(is_circular(head))
+    // {
+    //     cout<<"yes"<<endl;
+    // }
+    // else{
+    //     cout<<"NO"<<endl;
+    // }
+
+    // if(detectLoop(head))
+    // {
+    //     cout<<"yes"<<endl;
+    // }
+    // else{
+    //     cout<<"No"<<endl;
+    // }
+
+    // cout<<head->next->data<<endl;
+
+    return 0;
+}
