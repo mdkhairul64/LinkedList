@@ -1,0 +1,254 @@
+/// time complextiy is o(N/2)
+///spac complexity is O(1)
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node* next;
+
+    ///this is constructor
+    /// 
+    // Node(int data)
+    // {
+    //     this->data=data;
+    //     this->next=NULL;   
+    // }
+    ~Node()
+    {
+        int value=this->data;
+        if(this->next!=NULL)
+        {
+            delete next;
+            this->next=NULL;
+        }
+    }
+};
+
+void insert_at_head(Node* & head,int d)
+{
+        Node* new_node=new Node();
+
+        new_node->data=d;
+
+        new_node->next=head;
+
+        head=new_node;
+}
+
+void insert_at_tail(Node* &tail,int d)
+{
+     Node* newNode=new Node();
+    newNode->data = d;
+    newNode->next     = NULL;
+
+    //if head is NULL, it is an empty list
+    if(tail == NULL)
+         tail = newNode;
+    //Otherwise, find the last node and add the newNode
+    else
+    {
+       // struct node *lastNode = *head
+        Node* lastNode=tail;
+
+        //last node's next address will be NULL.
+        while(lastNode->next != NULL)
+        {
+            lastNode = lastNode->next;
+        }
+
+        //add the newNode at the end of the linked list
+        lastNode->next = newNode;
+    }
+}
+
+///in this function i use head and tail for maintaing the update of head and tail
+
+void insert_at_position(Node* &head,int position,int d)
+{
+    ///inserting at first position
+    if(position==1)
+    {
+        insert_at_head(head,d);
+        return ;
+    }
+    Node* temp= head;
+
+    int cnt=1;
+
+    while(cnt<position-1)
+    {
+        temp=temp->next;
+        cnt++;
+    }
+
+    ///inserting at last position
+    
+    if(temp->next==NULL)
+    {
+        insert_at_tail(head,d);
+        return ;
+    }
+
+    Node* nodetoinsert=new Node();
+    nodetoinsert->data=d;
+    nodetoinsert->next=temp->next;
+    temp->next=nodetoinsert; 
+}
+
+
+void delete_node(Node* &head,int position)
+{
+    if(position==1)
+    {
+        Node* temp=head;
+        head=head->next;
+        
+        temp->next=NULL;
+        delete temp;
+        
+    }
+    else{
+        Node* curr=head;
+        Node* prev=NULL;
+
+        int cnt=1;
+
+        while(cnt<position)
+        {
+            prev=curr;
+            curr=curr->next;
+            cnt++;
+        }
+
+        prev->next=curr->next;
+        
+        curr->next=NULL;  ///to make free the memory i should null the value
+        delete curr;
+    }
+}
+
+void print_list(Node * &head)
+{
+    Node* temp=head;
+    while(temp!=NULL)
+    {
+        cout<<temp->data<<" ";
+        temp=temp->next;
+    }cout<<endl;
+}
+
+
+void sort_012(Node* &head)
+{
+    int count[3]={0,0,0};
+
+    Node* temp=head;
+
+    while(temp!=NULL)
+    {
+        count[temp->data]++;
+        temp=temp->next;
+    }
+    temp=head;
+
+    int i=0;
+
+    while(temp!=NULL)
+    {
+        if(count[i]==0)
+        {
+            i++;
+        }
+        else{
+            temp->data=i;
+            temp=temp->next;
+            count[i]--;
+        }
+    }
+}
+
+Node* sort_012_striver(Node* &head)
+{
+    if(head==NULL || head->next==NULL)
+    {
+        return head;
+    }
+   Node* zeroHead=new Node();
+   zeroHead->data=-1;
+
+   Node* oneHead=new Node();
+   oneHead->data=-1;
+
+   Node* twoHead=new Node();
+   twoHead->data=-1;
+   
+   Node* zero=zeroHead;
+   Node* one=oneHead;
+   Node* two=twoHead;
+
+   Node* temp=head;
+
+
+   while(temp!=NULL)
+   {
+        if(temp->data==0)
+        {
+            zero->next=temp;
+            zero=temp;
+            
+        }
+        else if(temp->data==1)
+        {
+            one->next=temp;
+           one=temp;
+        }
+        else{
+            two->next=temp;
+            two=temp;
+        }
+        temp=temp->next;
+   }
+   
+   zero->next=(oneHead->next)?oneHead->next:twoHead->next;
+    one->next=twoHead->next;
+    two->next = NULL;
+
+    Node* newHead= zeroHead ->next;
+
+    return newHead;
+
+}
+
+int main()
+{
+   
+   Node *head = NULL;
+
+   int n;
+   cin>>n;
+
+
+     while(n--)
+     {
+        int data;
+        cin>>data;
+
+        insert_at_tail(head,data);
+
+     }
+     
+     print_list(head);
+
+
+     sort_012(head);
+
+     print_list(head);
+
+     Node* res=sort_012_striver(head);
+     print_list(res);
+
+
+    return 0;
+}
